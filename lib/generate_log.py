@@ -3,16 +3,19 @@ import os
 import requests
 
 def generate_log(data):
-    
-    log_data = ["User logged in", "User updated profile", "Report exported"]
+   
+    if not isinstance(data, list):
+        raise ValueError("Data must be a list")
 
     filename = f"log_{datetime.now().strftime('%Y%m%d')}.txt"
 
     with open(filename, "w") as file: 
-        for entry in log_data: 
+        for entry in data: 
             file.write(f"{entry}\n")
 
     print(f"Log written to {filename}")
+    return filename
+
 
 def fetch_data():
     response = requests.get("https://jsonplaceholder.typicode.com/posts/1")
@@ -22,6 +25,9 @@ def fetch_data():
 
 if __name__ == "__main__":
     post = fetch_data()
-    print("Fetched Post Title:", post.get("title", "No title found"))
+    title = post.get("title", "No title found")
+    print("Fetched Post Title:", title)
     
+    generate_log([title])
+
     pass
